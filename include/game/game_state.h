@@ -11,6 +11,7 @@ typedef std::array<CardValue_t, 5> CardStacks_t;
 typedef unsigned short TurnNum_t;
 typedef unsigned char PlayerNum_t;
 typedef unsigned char Counter_t;
+typedef unsigned short Score_t;
 
 class GameState
 {
@@ -18,6 +19,7 @@ public:
     friend class PlayCardAction;
     friend class DiscardCardAction;
     friend class HintAction;
+    friend class PlayFirstCardAgent;
 
     GameState(): discard_pile(), deck(), players({Player(), Player(), Player()}), stacks({0, 0, 0, 0, 0}), turn_number(0), countdown_turns(3), strikes(0), hints(8) {}
     GameState(const GameState& other)
@@ -37,12 +39,55 @@ public:
         GameState game_state;
         for (PlayerNum_t player = 0; player < 3; player++)
         {
-            for (CardNum_t i = 0; i < 5; i++)
+            for (CardNum_t j = 0; j < 5; j++)
             {
-                game_state.players[i].setCard(game_state.deck.drawCard(), i);
+                game_state.players[player].setCard(game_state.deck.drawCard(), j);
             }
         }
         return game_state;
+    }
+
+    void iterateState()
+    {
+        this->turn_number++;
+
+        for (PlayerNum_t i = 0; i < 3; i++)
+        {
+            for (CardNum_t j = 0; j < 5; j++)
+            {
+                if(!this->players[i].getHand()[j].has_value())
+                {
+                    if (this->deck.getRemainingCardNum() == 0)
+                    {
+                        this->countdown_turns--;
+                        return;
+                    }
+                    this->players[i].setCard(std::optional<Card>(this->deck.drawCard()), j);
+                    return;
+                }
+            }
+        }
+    }
+
+    bool isEndState() const
+    {
+        return (this->strikes == 3) || (this->countdown_turns == 0);
+    }
+
+    PlayerNum_t getCurrentPlayer() const
+    {
+        return turn_number % 2;
+    }
+
+    Score_t getScore() const
+    {
+        Score_t score = 0;
+        score += this->stacks[RED];
+        score += this->stacks[BLUE];
+        score += this->stacks[WHITE];
+        score += this->stacks[GREEN];
+        score += this->stacks[YELLOW];
+        return score;
     }
 
 private:

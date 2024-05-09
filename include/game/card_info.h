@@ -1,4 +1,5 @@
 #include "card.h"
+#include <array>
 
 #ifndef CARD_INFO_H_
 #define CARD_INFO_H_

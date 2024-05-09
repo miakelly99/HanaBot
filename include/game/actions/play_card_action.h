@@ -5,12 +5,12 @@
 #ifndef PLAY_CARD_ACTION_H_
 #define PLAY_CARD_ACTION_H_
 
-class PlayCardAction: AbstractAction
+class PlayCardAction: public AbstractAction
 {
 public:
     PlayCardAction(PlayerNum_t player, CardNum_t index): player(player), index(index) {}
 
-    void modifyGameState(GameState& game_state) override
+    void modifyGameState(GameState& game_state) const override
     {
         CardOpt_t card_opt = game_state.players[player].getHand()[index];
         if (!card_opt.has_value())

@@ -4,7 +4,7 @@
 class Hint
 {
 public:
-    virtual CardInfo getInfoProvidedToCard(const Card& card);
+    virtual CardInfo getInfoProvidedToCard(const Card& card) const = 0;
 };
 
 class ColorHint: Hint
@@ -12,7 +12,7 @@ class ColorHint: Hint
 public:
     ColorHint(CardColor_t color): color(color) {}
 
-    CardInfo getInfoProvidedToCard(const Card& card) override
+    CardInfo getInfoProvidedToCard(const Card& card) const override
     {
         CardInfo info;
         if (card.getColor() != this->color)
@@ -40,7 +40,7 @@ class ValueHint: Hint
 public:
     ValueHint(CardValue_t value): value(value) {}
 
-    CardInfo getInfoProvidedToCard(const Card& card) override
+    CardInfo getInfoProvidedToCard(const Card& card) const override
     {
         CardInfo info;
         if (card.getValue() != this->value)

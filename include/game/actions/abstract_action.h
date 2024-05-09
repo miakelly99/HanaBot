@@ -5,7 +5,11 @@
 
 class AbstractAction
 {
-    virtual void modifyGameState(GameState& game_state);
+public:
+    AbstractAction() {}
+    AbstractAction(AbstractAction&& o) {}
+
+    virtual void modifyGameState(GameState& game_state) const = 0;
 };
 
 #endif

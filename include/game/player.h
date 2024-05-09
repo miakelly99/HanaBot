@@ -1,5 +1,6 @@
 #include "card.h"
 #include "card_info.h"
+#include "deck.h"
 
 #include <optional>
 
@@ -16,6 +17,14 @@ class Player
 {
 public:
     Player(): hand(std::array<CardOpt_t, 5>()), hand_info(std::array<CardInfoOpt_t, 5>()) {}
+
+    const Player& operator=(const Player& other)
+    {
+        if (this == &other) return *this;
+        this->hand = other.hand;
+        this->hand_info = other.hand_info;
+        return *this;
+    }
 
     void setCard (const CardOpt_t& card, CardNum_t index) { hand[index] = card; }
     const Hand_t& getHand() const { return hand; }

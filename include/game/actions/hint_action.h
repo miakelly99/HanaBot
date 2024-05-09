@@ -4,12 +4,12 @@
 #ifndef HINT_ACTION_H_
 #define HINT_ACTION_H_
 
-class HintAction: AbstractAction
+class HintAction: public AbstractAction
 {
 public:
-    HintAction(PlayerNum_t player_index, const Hint& hint): player_index(player_index), hint(hint) {}
+    HintAction(PlayerNum_t player_index, Hint* hint): player_index(player_index), hint(hint) {}
 
-    void modifyGameState(GameState& game_state) override
+    void modifyGameState(GameState& game_state) const override
     {
         if (game_state.hints == 0)
         {
@@ -22,7 +22,7 @@ public:
         {
             if (player->getHand()[i].has_value())
             {
-                CardInfo new_info = hint.getInfoProvidedToCard(player->getHand()[i].value());
+                CardInfo new_info = hint->getInfoProvidedToCard(player->getHand()[i].value());
                 CardInfo old_info = player->getHandInfo()[i].value();
                 player->setHandInfo(std::optional<CardInfo>(new_info + old_info), i);
             }
@@ -32,7 +32,7 @@ public:
     
 private:
     PlayerNum_t player_index;
-    Hint hint;
+    Hint* hint;
 };
 
 #endif

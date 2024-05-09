@@ -5,12 +5,12 @@
 #ifndef DISCARD_CARD_ACTION_H
 #define DISCARD_CARD_ACTION_H
 
-class DiscardCardAction: AbstractAction
+class DiscardCardAction: public AbstractAction
 {
 public:
     DiscardCardAction(PlayerNum_t player, CardNum_t index): player(player), index(index) {}
 
-    void modifyGameState(GameState& game_state) override
+    void modifyGameState(GameState& game_state) const override
     {
         CardOpt_t card_opt = game_state.players[player].getHand()[index];
         if (!card_opt.has_value())
